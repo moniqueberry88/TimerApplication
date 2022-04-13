@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.*
 import kotlin.time.ExperimentalTime
 
 class MainActivity : AppCompatActivity() {
+
+    private var closeAppFragmentInstance: CloseAppFragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
