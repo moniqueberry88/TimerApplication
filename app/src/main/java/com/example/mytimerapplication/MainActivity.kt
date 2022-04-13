@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         counterMessageTextView.text = getString(R.string.initial_time_message)
 
         button.setOnClickListener {
+            // if user doenst enter a start time it will fire a toast. else perform countdown
             if (timerInput.text.toString().equals("")) {
                 Toast.makeText(
                     applicationContext,
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                 )
                     .show()
             } else {
+                // setting ui
                 timeView.text = ""
                 progressBar.max = timerInput.text.toString().toInt()
                 progressBar.visibility = View.VISIBLE
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                 timeView.visibility = View.VISIBLE
                 timerInput.visibility = View.GONE
                 button.isEnabled = false
+                // launching coroutine for looping through the users input
                 GlobalScope.launch(Dispatchers.IO) {
                     val time = timerInput.getText().toString().toInt()
                     for (i in time downTo 0) {
@@ -54,11 +57,11 @@ class MainActivity : AppCompatActivity() {
                             timeView.text = i.toString()
                             progressBar.progress = timeView.text.toString().toInt()
                         }
+                        // end of count show message to re-enter an input
                         if (i == 0) {
                             launch(Dispatchers.Main) {
                                 button.isEnabled = true
-                                counterMessageTextView.text =
-                                    getString(R.string.timer_done_time_message)
+                                counterMessageTextView.text = getString(R.string.timer_done_time_message)
                                 timeView.visibility = View.GONE
                                 progressBar.visibility = View.GONE
                                 counterMessageTextView.visibility = View.VISIBLE
@@ -69,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
+        // destroy application
         closeImage.setOnClickListener { finishAndRemoveTask() }
     }
 }
