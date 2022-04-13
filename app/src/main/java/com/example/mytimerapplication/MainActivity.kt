@@ -47,9 +47,8 @@ class MainActivity : AppCompatActivity() {
                 timerInput.visibility = View.GONE
                 button.isEnabled = false
                 GlobalScope.launch(Dispatchers.IO) {
-                    val value: String = timerInput.getText().toString()
-                    val finalValue = value.toInt()
-                    for (i in finalValue downTo 0) {
+                    val time = timerInput.getText().toString().toInt()
+                    for (i in time downTo 0) {
                         delay(1000)
                         launch(Dispatchers.Main) {
                             timeView.text = i.toString()
