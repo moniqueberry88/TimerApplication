@@ -21,6 +21,13 @@ class CloseAppFragment : Fragment() {
 
         var closeBtn: Button = view.findViewById(R.id.close_frag_button)
         var cancelBtn: Button = view.findViewById(R.id.cancel_frag_button)
+
+        closeBtn.setOnClickListener { activity?.finish() }
+        cancelBtn.setOnClickListener {
+            val manager = requireActivity().supportFragmentManager
+            manager.beginTransaction().remove(this).commit()
+
+        }
     }
 
 }

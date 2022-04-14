@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0C0C0C"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".CloseAppFragment">
 
@@ -11,6 +12,7 @@
         android:id="@+id/close_app_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:text="Are you sure you would like to quit?"
         android:textAlignment="center"
         android:textSize="8pt"

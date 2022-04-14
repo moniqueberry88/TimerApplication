@@ -15,7 +15,7 @@ import kotlin.time.ExperimentalTime
 
 class MainActivity : AppCompatActivity() {
 
-    private var closeAppFragmentInstance: CloseAppFragment? = null
+    private var closeAppFragment: CloseAppFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +61,8 @@ class MainActivity : AppCompatActivity() {
                         if (i == 0) {
                             launch(Dispatchers.Main) {
                                 button.isEnabled = true
-                                counterMessageTextView.text = getString(R.string.timer_done_time_message)
+                                counterMessageTextView.text =
+                                    getString(R.string.timer_done_time_message)
                                 timeView.visibility = View.GONE
                                 progressBar.visibility = View.GONE
                                 counterMessageTextView.visibility = View.VISIBLE
@@ -72,7 +73,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        // destroy application
-        closeImage.setOnClickListener { finishAndRemoveTask() }
+
+        // open quit app fragment
+        closeImage.setOnClickListener {
+            closeAppFragment = CloseAppFragment()
+            closeAppFragment?.let { fragment ->
+                supportFragmentManager.beginTransaction()
+                    .addToBackStack(fragment.tag)
+                    .add(R.id.close_app_fragment, fragment)
+                    .commit()
+            }
+        }
     }
 }
