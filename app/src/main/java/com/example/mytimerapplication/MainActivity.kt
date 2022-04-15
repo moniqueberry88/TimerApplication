@@ -1,17 +1,15 @@
 package com.example.mytimerapplication
 
 
-import android.content.ContentValues.TAG
+import android.graphics.Color
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlin.time.ExperimentalTime
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                 )
                     .show()
             } else {
+                // set ui for when the countdown starts
                 timeView.text = ""
                 progressBar.max = timePicker.value
                 counterMessageTextView.visibility = View.GONE
@@ -47,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                 timeView.visibility = View.VISIBLE
                 timePicker.visibility = View.GONE
                 startTimerBtn.isEnabled = false
+                startTimerBtn.setTextColor(Color.parseColor("#000000"))
                 startTimerBtn.text = getString(R.string.timer_started)
                 // launching coroutine for looping through the users input
                 GlobalScope.launch(Dispatchers.IO) {
@@ -61,9 +61,10 @@ class MainActivity : AppCompatActivity() {
                         if (i == 1) {
                             launch(Dispatchers.Main) {
                                 startTimerBtn.isEnabled = true
+                                startTimerBtn.setTextColor(Color.parseColor("#FFFFFF"))
                                 startTimerBtn.text = getString(R.string.start_timer)
                                 counterMessageTextView.text =
-                                    getString(R.string.timer_done_time_message)
+                                    getString(R.string.enter_your_start_timer)
                                 timeView.visibility = View.GONE
                                 progressBar.visibility = View.GONE
                                 counterMessageTextView.visibility = View.VISIBLE
@@ -74,7 +75,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
         // open quit app fragment
         closeImage.setOnClickListener { finishAndRemoveTask() }
     }
