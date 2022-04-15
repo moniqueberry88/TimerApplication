@@ -15,24 +15,24 @@ import kotlin.time.ExperimentalTime
 
 class MainActivity : AppCompatActivity() {
 
-    private var closeAppFragment: CloseAppFragment? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var closeImage: ImageView = findViewById(R.id.close_image)
-        var progressBar: ProgressBar = findViewById(R.id.progress_bar)
-        var button: Button = findViewById(R.id.timer_button);
-        var counterMessageTextView: TextView = findViewById(R.id.time_counter_message_text_view)
-        var timeView: TextView = findViewById(R.id.selected_time_view)
-        var timerInput: EditText = findViewById(R.id.select_time_view)
+        val closeImage: ImageView = findViewById(R.id.close_image)
+        val progressBar: ProgressBar = findViewById(R.id.progress_bar)
+        val startTimerBtn: Button = findViewById(R.id.start_timer_btn)
+        val counterMessageTextView: TextView = findViewById(R.id.time_counter_message_text_view)
+        val timeView: TextView = findViewById(R.id.selected_time_view)
+        val timePicker: NumberPicker = findViewById(R.id.time_picker)
 
-        counterMessageTextView.text = getString(R.string.initial_time_message)
+        counterMessageTextView.text = getString(R.string.enter_your_start_timer)
+        timePicker.minValue = 0
+        timePicker.maxValue = 99
 
-        button.setOnClickListener {
-            // if user doenst enter a start time it will fire a toast. else perform countdown
-            if (timerInput.text.toString().equals("")) {
+        startTimerBtn.setOnClickListener {
+            // if user doesn't enter a start time it will fire a toast. else perform countdown
+            if (timePicker.value == 0) {
                 Toast.makeText(
                     applicationContext,
                     getString(R.string.enter_time_message),
@@ -40,33 +40,34 @@ class MainActivity : AppCompatActivity() {
                 )
                     .show()
             } else {
-                // setting ui
                 timeView.text = ""
-                progressBar.max = timerInput.text.toString().toInt()
-                progressBar.visibility = View.VISIBLE
+                progressBar.max = timePicker.value
                 counterMessageTextView.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
                 timeView.visibility = View.VISIBLE
-                timerInput.visibility = View.GONE
-                button.isEnabled = false
+                timePicker.visibility = View.GONE
+                startTimerBtn.isEnabled = false
+                startTimerBtn.text = getString(R.string.timer_started)
                 // launching coroutine for looping through the users input
                 GlobalScope.launch(Dispatchers.IO) {
-                    val time = timerInput.getText().toString().toInt()
-                    for (i in time downTo 0) {
-                        delay(1000)
+                    val time = timePicker.value.toString().toInt()
+                    for (i in time downTo 1) {
                         launch(Dispatchers.Main) {
                             timeView.text = i.toString()
                             progressBar.progress = timeView.text.toString().toInt()
                         }
+                        delay(1000)
                         // end of count show message to re-enter an input
-                        if (i == 0) {
+                        if (i == 1) {
                             launch(Dispatchers.Main) {
-                                button.isEnabled = true
+                                startTimerBtn.isEnabled = true
+                                startTimerBtn.text = getString(R.string.start_timer)
                                 counterMessageTextView.text =
                                     getString(R.string.timer_done_time_message)
                                 timeView.visibility = View.GONE
                                 progressBar.visibility = View.GONE
                                 counterMessageTextView.visibility = View.VISIBLE
-                                timerInput.visibility = View.VISIBLE
+                                timePicker.visibility = View.VISIBLE
                             }
                         }
                     }
@@ -75,14 +76,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         // open quit app fragment
-        closeImage.setOnClickListener {
-            closeAppFragment = CloseAppFragment()
-            closeAppFragment?.let { fragment ->
-                supportFragmentManager.beginTransaction()
-                    .addToBackStack(fragment.tag)
-                    .add(R.id.close_app_fragment, fragment)
-                    .commit()
-            }
-        }
+        closeImage.setOnClickListener { finishAndRemoveTask() }
     }
 }

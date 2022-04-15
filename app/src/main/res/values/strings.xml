@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">My Timer Application</string>
-    <string name="enter_time_message">Please Enter a Time!</string>
+    <string name="enter_time_message">Please Enter a Valid Time!</string>
     <string name="initial_time_message">Welcome Lets Begin The Countdown.</string>
-    <string name="timer_done_time_message">Your Current Time has elapsed please re-submit a time to continue.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="timer_done_time_message">Times Up! Enter a New Time</string>
+    <string name="start_timer">Start Timer</string>
+    <string name="timer_started">Timer Started</string>
+    <string name="enter_your_start_timer">Please Enter A Start Time</string>
 </resources>
