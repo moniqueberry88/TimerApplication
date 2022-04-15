@@ -21,7 +21,7 @@
         android:visibility="gone"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="60pt"
         android:indeterminate="false"
         app:layout_constraintBottom_toTopOf="@id/time_picker"
         app:layout_constraintTop_toTopOf="parent"
