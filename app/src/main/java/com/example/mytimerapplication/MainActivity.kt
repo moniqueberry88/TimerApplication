@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mytimerapplication.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -15,60 +16,53 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val closeImage: ImageView = findViewById(R.id.close_image)
-        val progressBar: ProgressBar = findViewById(R.id.progress_bar)
-        val startTimerBtn: Button = findViewById(R.id.start_timer_btn)
-        val counterMessageTextView: TextView = findViewById(R.id.time_counter_message_text_view)
-        val timeView: TextView = findViewById(R.id.selected_time_view)
-        val timePicker: NumberPicker = findViewById(R.id.time_picker)
+        binding.timeCounterMessageTextView.text = getString(R.string.enter_your_start_timer)
+        binding.timePicker.minValue = 0
+        binding.timePicker.maxValue = 99
 
-        counterMessageTextView.text = getString(R.string.enter_your_start_timer)
-        timePicker.minValue = 0
-        timePicker.maxValue = 99
-
-        startTimerBtn.setOnClickListener {
+        binding.startTimerBtn.setOnClickListener {
             // if user doesn't enter a start time it will fire a toast. else perform countdown
-            if (timePicker.value == 0) {
+            if (binding.timePicker.value == 0) {
                 Toast.makeText(
                     applicationContext,
                     getString(R.string.enter_time_message),
                     Toast.LENGTH_SHORT
-                )
-                    .show()
+                ).show()
             } else {
                 // set ui for when the countdown starts
-                timeView.text = ""
-                progressBar.max = timePicker.value
-                counterMessageTextView.visibility = View.GONE
-                progressBar.visibility = View.VISIBLE
-                timeView.visibility = View.VISIBLE
-                timePicker.visibility = View.GONE
-                startTimerBtn.isEnabled = false
-                startTimerBtn.setTextColor(Color.parseColor("#000000"))
-                startTimerBtn.text = getString(R.string.timer_started)
+                binding.selectedTimeView.text = ""
+                binding.progressBar.max = binding.timePicker.value
+                binding.timeCounterMessageTextView.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
+                binding.selectedTimeView.visibility = View.VISIBLE
+                binding.timePicker.visibility = View.GONE
+                binding.startTimerBtn.isEnabled = false
+                binding.startTimerBtn.setTextColor(Color.parseColor("#000000"))
+                binding.startTimerBtn.text = getString(R.string.timer_started)
                 // launching coroutine for looping through the users input
                 GlobalScope.launch(Dispatchers.IO) {
-                    val time = timePicker.value.toString().toInt()
+                    val time = binding.timePicker.value.toString().toInt()
                     for (i in time downTo 1) {
                         launch(Dispatchers.Main) {
-                            timeView.text = i.toString()
-                            progressBar.progress = timeView.text.toString().toInt()
+                            binding.selectedTimeView.text = i.toString()
+                            binding.progressBar.progress = binding.selectedTimeView.text.toString().toInt()
                         }
                         delay(1000)
                         // end of count show message to re-enter an input
                         if (i == 1) {
                             launch(Dispatchers.Main) {
-                                startTimerBtn.isEnabled = true
-                                startTimerBtn.setTextColor(Color.parseColor("#FFFFFF"))
-                                startTimerBtn.text = getString(R.string.start_timer)
-                                counterMessageTextView.text =
+                                binding.startTimerBtn.isEnabled = true
+                                binding.startTimerBtn.setTextColor(Color.parseColor("#FFFFFF"))
+                                binding.startTimerBtn.text = getString(R.string.start_timer)
+                                binding.timeCounterMessageTextView.text =
                                     getString(R.string.enter_your_start_timer)
-                                timeView.visibility = View.GONE
-                                progressBar.visibility = View.GONE
-                                counterMessageTextView.visibility = View.VISIBLE
-                                timePicker.visibility = View.VISIBLE
+                                binding.selectedTimeView.visibility = View.GONE
+                                binding.progressBar.visibility = View.GONE
+                                binding.timeCounterMessageTextView.visibility = View.VISIBLE
+                                binding.timePicker.visibility = View.VISIBLE
                             }
                         }
                     }
@@ -76,6 +70,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // open quit app fragment
-        closeImage.setOnClickListener { finishAndRemoveTask() }
+        binding.closeImage.setOnClickListener { finishAndRemoveTask() }
     }
 }
